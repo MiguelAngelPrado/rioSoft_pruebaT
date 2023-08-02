@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>Ejemplo Raphaeljs</title>
+    <script type="text/javascript" src="../plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="raphael.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Ejemplo Raphaeljs</h1>
+    <hr />
+    <div id="municipiotxt">Selecciona un municipio</div>
+    <div id="lienzo">
+      <img id="loadingicon" src="loading.gif" />
+    </div>
+    <script>
+      var municipios_data = {'path2643': 'Cuevas de San Marcos',
+        'path2647': 'Alameda',
+    'path2651': 'Cuevas Hajas',
+    'path2655': 'Villanueva de Algaidas',
+    'path2659': 'Antequera',
+    'path2667': 'Villanueva de Tapia',
+    'path2671': 'Sierra de Yeguas',
+    'path2675': 'Mollina',
+    'path2679': 'Humilladero',
+    'path2683': 'Fuente de Piedra',
+    'path2687': 'Archidona',
+    'path2691': 'Campillos',
+    'path2695': 'Villanueva del Trabuco',
+    'path2699': 'Almargen',
+    'path2703': 'Teba',
+    'path2707': 'Villanueva del Rosario',
+    'path2711': 'Cañete la Real',
+    'path2715': 'Alfarnate',
+    'path2719': 'Alfarnatejo',
+    'path2723': 'Colmenar',
+    'path2727': 'Periana',
+    'path2731': 'Riogordo',
+    'path2735': 'Valle de Abdalajis',
+    'path2739': 'Alcaucín',
+    'path2743': 'Ardales',
+    'path2747': 'Álora',
+    'path2751': 'Ronda',
+    'path2763': 'Cuevas del Becerro',
+    'path2775': 'Canillas de Aceituno',
+    'path2779': 'Sedella',
+    'path2787': 'Viñuela',
+    'path2795': 'Málaga',
+    'path2799': 'El Burgo',
+    'path2803': 'Canillas de Albaida',
+    'path2807': 'Salares',
+    'path2811': 'Comares',
+    'path2819': 'Carratraca',
+    'path2823': 'Cómpeta',
+    'path2827': 'Casarabonela',
+    'path2831': 'Vélez-Málaga',
+    'path2839': 'Frigiliana',
+    'path2843': 'Nerja',
+    'path2859': 'Arriate',
+    'path2867': 'Cártama',
+    'path2871': 'Torrox',
+    'path2875': 'Pizarra',
+    'path2899': 'Algarrobo',
+    'path2903': 'Yunquera',
+    'path2907': 'Montejaque',
+    'path2911': 'Totalán',
+    'path2915': 'Alozaina',
+    'path2927': 'Coín',
+    'path2931': 'Benaoján',
+    'path2935': 'Rincón de la Victoria',
+    'path2939': 'Tolox',
+    'path2943': 'Alhaurín de la Torre',
+    'path2947': 'Guaro',
+    'path2951': 'Alpandeite',
+    'path2955': 'Alhaurín el Grande',
+    'path2959': 'Parauta',
+    'path2967': 'Jimera de Líbar',
+    'path2971': 'Cortes de la Frontera',
+    'path2975': 'Júzcar',
+    'path2979': 'Atajate',
+    'path2983': 'Igualeja',
+    'path2987': 'Istán',
+    'path2991': 'Monda',
+    'path2995': 'Faraján',
+    'path2999': 'Torremolinos',
+    'path3003': 'Benahavís',
+    'path3007': 'Benadalid',
+    'path3011': 'Pujarra',
+    'path3015': 'Mijas',
+    'path3019': 'Benalmádena',
+    'path3023': 'Benalauría',
+    'path3027': 'Ojén',
+    'path3031': 'Jubrique',
+    'path3035': 'Algatocín',
+    'path3039': 'Fuengirola',
+    'path3043': 'Benarrabá',
+    'path3047': 'Genalguacíl',
+    'path3051': 'Gaucín',
+    'path3055': 'Marbella',
+    'path3059': 'Estepona',
+    'path3063': 'Casares',
+    'path3067': 'Manilva'};
+
+      var default_attributes = {
+            fill: '#abcabc',
+            stroke: '#000000',
+            'stroke-width': 1,
+        };
+      var $munictxt = $('#municipiotxt');
+
+      $.ajax({
+        url: 'Malaga_municipios.svg',
+    type: 'GET',
+    dataType: 'xml',
+    success: function(xml) {
+      var rjs = Raphael('lienzo', 700, 400);
+      var corr="";
+      $(xml).find('svg > g > g > path').each(function() {
+        var path = $(this).attr('d');
+    var pid = $(this).attr('id');
+        var munic = rjs.path(path);
+
+        munic.attr(default_attributes);
+        munic.hover(function() {
+          this.animate({ fill: '#00bbff' });
+          var text = "Municipio: ";
+          if (typeof(municipios_data[pid])!='undefined')
+            text+=municipios_data[pid];
+          else
+            text+="Sin nombre";
+          text+="("+$(this).attr('id')+")";
+
+          $munictxt.html(text);
+        }, function() {
+          this.animate({ fill: default_attributes.fill });
+          $munictxt.html("Selecciona un municipio");
+        }). click(function() {
+          alert("Click sobre un municipio. ID = "+$(this).attr('id'));
+        });
+          });
+      $('#loadingicon').hide();
+    }
+      });
+
+    </script>
+  </body>
+</html>
